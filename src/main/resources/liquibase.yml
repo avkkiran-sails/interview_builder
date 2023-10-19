@@ -1,0 +1,8 @@
+url: jdbc:postgresql:///postgres
+driver: org.postgresql.Driver
+username: postgres
+password: sails@123
+changelogFile: src/main/resources/db/changelog/db.changelog-master.yaml
+outputChangeLogFile: src/main/resources/db/changelog/db.snapshot.sql
+snapshotFormat: json
+output-file: snapshot.json
