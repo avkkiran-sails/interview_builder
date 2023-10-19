@@ -1,0 +1,16 @@
+spring:
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY}
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: sails@123
+  jpa:
+    database: POSTGRESQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+db:
+  schema: sails
