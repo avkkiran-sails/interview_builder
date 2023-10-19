@@ -20,17 +20,18 @@ public class SchemaConfig implements BeanPostProcessor {
     Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Override
-    public Object postProcessAfterInitialization(@NotNull Object bean, @NotNull String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(@NotNull Object bean,
+                                                 @NotNull String beanName) throws BeansException {
         if(bean instanceof DataSource dataSource) {
             try(Connection con = dataSource.getConnection();
                 Statement stat = con.createStatement()) {
-                logger.info("Executing schema creation script");
+                logger.info("Executing schema creation script for schema: "+dbSchema);
                 stat.execute("create schema if not exists "+dbSchema);
             } catch (SQLException e) {
                 throw new RuntimeException(
                         "Exception in creating schema: "+e.getMessage());
             }
         }
-        return BeanPostProcessor.super.postProcessAfterInitialization(bean, beanName);
+        return bean;
     }
 }
