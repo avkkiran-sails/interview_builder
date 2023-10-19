@@ -1,6 +1,5 @@
 package com.sails.software.interview.builder.config;
 
-import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
@@ -20,8 +19,8 @@ public class SchemaConfig implements BeanPostProcessor {
     Logger logger = Logger.getLogger(this.getClass().getName());
 
     @Override
-    public Object postProcessAfterInitialization(@NotNull Object bean,
-                                                 @NotNull String beanName) throws BeansException {
+    public Object postProcessAfterInitialization(Object bean,
+                                                 String beanName) throws BeansException {
         if(bean instanceof DataSource dataSource) {
             try(Connection con = dataSource.getConnection();
                 Statement stat = con.createStatement()) {
