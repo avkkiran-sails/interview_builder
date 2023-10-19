@@ -1,0 +1,21 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/postgres
+    username: postgres
+    password: sails@123
+  liquibase:
+    enabled: true
+    default-schema: ${db.schema}
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+  jpa:
+    database: POSTGRESQL
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        default_schema: ${db.schema}
+
+db:
+  schema: sails
+
+app:
+  name: Interview Builder
