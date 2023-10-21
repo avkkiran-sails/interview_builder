@@ -4,7 +4,7 @@ spring:
     username: postgres
     password: sails@123
   liquibase:
-    enabled: true
+    enabled: false
     default-schema: ${db.schema}
     change-log: classpath:db/changelog/db.changelog-master.yaml
   jpa:
@@ -13,9 +13,18 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
         default_schema: ${db.schema}
+  cloud:
+    gcp:
+      project-id: interviewbuilder
+      credentials:
+        location: file:C:\Users\SAILS-DM93\Downloads\interviewbuilder-9e90ab5dba36.json
 
 db:
   schema: sails
 
 app:
   name: Interview Builder
+
+pubsub:
+  topic: projects/interviewbuilder/topics/interview-builder-dev
+  subscription: projects/interviewbuilder/subscriptions/interview-builder-dev-sub

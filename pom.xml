@@ -64,7 +64,18 @@
 			<groupId>org.liquibase</groupId>
 			<artifactId>liquibase-core</artifactId>
 		</dependency>
-	</dependencies>
+		<dependency>
+			<groupId>com.google.cloud</groupId>
+			<artifactId>spring-cloud-gcp-starter-pubsub</artifactId>
+			<version>4.8.2</version>
+		</dependency>
+        <dependency>
+            <groupId>com.google.cloud</groupId>
+            <artifactId>spring-cloud-gcp-pubsub</artifactId>
+            <version>4.8.2</version>
+        </dependency>
+
+    </dependencies>
 
 	<build>
 		<plugins>

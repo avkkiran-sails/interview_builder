@@ -11,7 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Logger;
 
-@Configuration
+//@Configuration
 public class SchemaConfig implements BeanPostProcessor {
     @Value("${db.schema}")
     private String dbSchema;
