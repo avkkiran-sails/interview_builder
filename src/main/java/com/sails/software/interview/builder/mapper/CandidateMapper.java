@@ -9,4 +9,5 @@ import java.util.List;
 @Mapper(componentModel = "spring")
 public interface CandidateMapper {
     List<Candidate> toItemList(List<CandidateEntity> candidateEntityList);
+    Candidate toItem(CandidateEntity candidateEntity);
 }
