@@ -1,6 +1,7 @@
 package com.sails.software.interview.builder.controller;
 
 import com.sails.software.interview.builder.model.Candidate;
+import com.sails.software.interview.builder.model.CandidateQuestionsResponse;
 import com.sails.software.interview.builder.service.CandidateServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,5 +23,10 @@ public class CandidateController {
     @GetMapping("candidates/{id}")
     public Candidate getCandidateById(@PathVariable Long id) {
         return candidateService.getCandidateById(id);
+    }
+
+    @GetMapping("candidates/{id}/questions")
+    public CandidateQuestionsResponse getCandidateQuestions(@PathVariable Long id) {
+        return candidateService.getCandidateQuestions(id);
     }
 }
