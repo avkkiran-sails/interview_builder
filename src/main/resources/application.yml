@@ -15,7 +15,11 @@ spring:
         default_schema: ${db.schema}
   cloud:
     gcp:
+      pubsub:
+        enabled: true
       project-id: interviewbuilder
+      config:
+        enabled: true
       credentials:
         location: file:C:\Users\SAILS-DM93\Downloads\interviewbuilder-9e90ab5dba36.json
 
