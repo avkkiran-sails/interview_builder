@@ -1,6 +1,5 @@
 package com.sails.software.interview.builder.service;
 
-import com.google.api.gax.rpc.DeadlineExceededException;
 import com.google.cloud.spring.pubsub.core.PubSubTemplate;
 import com.google.cloud.spring.pubsub.support.AcknowledgeablePubsubMessage;
 import lombok.RequiredArgsConstructor;
@@ -12,8 +11,6 @@ import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
-
-import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
@@ -60,9 +57,7 @@ public class PubSubConsumerServiceImpl {
         int intDemand = numRequested > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) numRequested;
 
         try {
-            var msgs = this.pubSubTemplate.pullAsync(subscriptionName, intDemand, false);
-
-            msgs.whenComplete(
+            this.pubSubTemplate.pullAsync(subscriptionName, intDemand, false).whenComplete(
                     (messages, exception) -> {
                         if (!sink.isCancelled()) {
                             messages.forEach(sink::next);
@@ -80,8 +75,6 @@ public class PubSubConsumerServiceImpl {
                             }
                         }
                     });
-
-            System.out.println(msgs.get().size());
         }catch (Exception ex){
             System.out.println(ex);
         }
