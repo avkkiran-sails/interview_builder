@@ -6,3 +6,4 @@ changelogFile: src/main/resources/db/changelog/db.changelog-master.yaml
 outputChangeLogFile: src/main/resources/db/changelog/db.snapshot.sql
 snapshotFormat: json
 output-file: snapshot.json
+defaultSchemaName: sails

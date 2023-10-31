@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/changesets/initial-snapshot.sql
   - include:
       file: db/changelog/changesets/insert-candidates.sql
+  - include:
+      file: db/changelog/changesets/insert-candidates-v2.sql
