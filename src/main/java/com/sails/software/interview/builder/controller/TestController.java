@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     private final PubSubPublisherServiceImpl pubSubPublisherService;
-    private final PubSubConsumerServiceImpl pubSubConsumerService;
 
     @GetMapping("/hello")
     public HelloWorld helloWorld() {
@@ -25,10 +24,5 @@ public class TestController {
     @PostMapping(path = "/publishMessage/{message}")
     public void publishMessage(@PathVariable String message) {
         pubSubPublisherService.publishMessage(message);
-    }
-
-    @GetMapping("/consumeMessage")
-    public void consumeMessage() {
-        pubSubConsumerService.consumeMessage();
     }
 }

@@ -28,7 +28,6 @@ public class PubSubConsumerServiceImpl {
             System.out.println("Inside consumeMessage");
             var flux = this.poll(subscriptionTopic);
             subscription = this.processing(flux.limitRate(1)).subscribe();
-
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
@@ -36,11 +35,12 @@ public class PubSubConsumerServiceImpl {
 
     public Flux<AcknowledgeablePubsubMessage> poll(String subscriptionName) {
         return Flux.create(
-                sink ->
-                        sink.onRequest(
+                fluxSink ->
+                        fluxSink.onRequest(
                                 count -> {
                                     try {
-                                        pull(subscriptionName, count, sink);
+                                        System.out.println("count: " + count);
+                                        pull(subscriptionName, count, fluxSink);
                                     } catch (Exception e) {
                                         System.out.println(e);
                                     }
@@ -50,39 +50,36 @@ public class PubSubConsumerServiceImpl {
     }
 
     private void pull(String subscriptionName, long numRequested,
-                      FluxSink<AcknowledgeablePubsubMessage> sink) {
+                      FluxSink<AcknowledgeablePubsubMessage> fluxSink) {
         int intDemand = numRequested > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) numRequested;
+        System.out.println("intDemand: " + intDemand);
 
         try {
             this.pubSubTemplate.pullAsync(subscriptionName, intDemand, false).whenComplete(
                     (messages, exception) -> {
-                        if (!sink.isCancelled()) {
-                            messages.forEach(sink::next);
-                        }
-                        if (!sink.isCancelled()) {
+                        System.out.println("Messages size: " + messages.size());
+                        if (!fluxSink.isCancelled()) {
+                            messages.forEach(fluxSink::next);
                             long numToPull = numRequested - messages.size();
+                            System.out.println("numToPull: " + numToPull);
                             if (numToPull > 0) {
+                                System.out.println("Inside numToPull");
                                 try {
-                                    pull(subscriptionName, numToPull, sink);
+                                    pull(subscriptionName, numToPull, fluxSink);
                                 } catch (Exception e) {
                                     System.out.println(e);
                                 }
                             }
                         }
                     });
+            //TODO:: Dispose after use
         } catch (Exception ex) {
             System.out.println(ex);
         }
     }
 
-    private final Flux<?> processing(Flux<AcknowledgeablePubsubMessage> flux) {
-        return flux.flatMap(this::processing);
-    }
-
-    private Mono<?> processing(AcknowledgeablePubsubMessage message) {
-        return Mono
-                .just(message)
-                .flatMap(this::processMessage);
+    private Flux<?> processing(Flux<AcknowledgeablePubsubMessage> flux) {
+        return flux.flatMap(this::processMessage);
     }
 
     private Mono<?> processMessage(AcknowledgeablePubsubMessage message) {
@@ -90,7 +87,6 @@ public class PubSubConsumerServiceImpl {
         message.ack();
         return Mono.just(message);
     }
-
 
     @EventListener(ApplicationStartedEvent.class)
     public void startConsumer() {

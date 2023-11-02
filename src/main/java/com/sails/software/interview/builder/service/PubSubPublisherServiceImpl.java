@@ -16,8 +16,7 @@ public class PubSubPublisherServiceImpl {
 
     public void publishMessage(String message){
         try {
-            var messageId = publisher.publish(topic, message).get();
-            System.out.println(messageId);
+            publisher.publish(topic, message).get();
         } catch (Exception ex){
             System.out.println(ex.getMessage());
         }
