@@ -11,7 +11,6 @@ import reactor.core.Disposable;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
-import java.util.concurrent.ExecutionException;
 
 @RequiredArgsConstructor
 @Service
@@ -24,15 +23,15 @@ public class PubSubConsumerServiceImpl {
     @Value("${pubsub.subscription}")
     private String subscriptionTopic;
 
-    public void consumeMessage(){
+    public void consumeMessage() {
         try {
             System.out.println("Inside consumeMessage");
             var flux = this.poll(subscriptionTopic);
             subscription = this.processing(flux.limitRate(1)).subscribe();
 
-            } catch(Exception ex){
-                System.out.println(ex.getMessage());
-            }
+        } catch (Exception ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
     public Flux<AcknowledgeablePubsubMessage> poll(String subscriptionName) {
@@ -42,10 +41,8 @@ public class PubSubConsumerServiceImpl {
                                 count -> {
                                     try {
                                         pull(subscriptionName, count, sink);
-                                    } catch (ExecutionException e) {
-                                        e.printStackTrace();
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
+                                    } catch (Exception e) {
+                                        System.out.println(e);
                                     }
                                 }
                         )
@@ -53,7 +50,7 @@ public class PubSubConsumerServiceImpl {
     }
 
     private void pull(String subscriptionName, long numRequested,
-                      FluxSink<AcknowledgeablePubsubMessage> sink) throws ExecutionException, InterruptedException {
+                      FluxSink<AcknowledgeablePubsubMessage> sink) {
         int intDemand = numRequested > Integer.MAX_VALUE ? Integer.MAX_VALUE : (int) numRequested;
 
         try {
@@ -67,30 +64,28 @@ public class PubSubConsumerServiceImpl {
                             if (numToPull > 0) {
                                 try {
                                     pull(subscriptionName, numToPull, sink);
-                                } catch (ExecutionException e) {
-                                    e.printStackTrace();
-                                } catch (InterruptedException e) {
-                                    e.printStackTrace();
+                                } catch (Exception e) {
+                                    System.out.println(e);
                                 }
                             }
                         }
                     });
-        }catch (Exception ex){
+        } catch (Exception ex) {
             System.out.println(ex);
         }
     }
 
-    private final Flux<?> processing(Flux<AcknowledgeablePubsubMessage> flux){
+    private final Flux<?> processing(Flux<AcknowledgeablePubsubMessage> flux) {
         return flux.flatMap(this::processing);
     }
 
-    private Mono<?> processing(AcknowledgeablePubsubMessage message){
+    private Mono<?> processing(AcknowledgeablePubsubMessage message) {
         return Mono
                 .just(message)
                 .flatMap(this::processMessage);
     }
 
-    private Mono<?> processMessage(AcknowledgeablePubsubMessage message){
+    private Mono<?> processMessage(AcknowledgeablePubsubMessage message) {
         System.out.println(message.getPubsubMessage().getData());
         message.ack();
         return Mono.just(message);
@@ -98,7 +93,7 @@ public class PubSubConsumerServiceImpl {
 
 
     @EventListener(ApplicationStartedEvent.class)
-    public void startConsumer(){
+    public void startConsumer() {
         this.consumeMessage();
     }
 }
