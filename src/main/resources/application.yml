@@ -17,11 +17,11 @@ spring:
     gcp:
       pubsub:
         enabled: true
-      project-id: interviewbuilder
+      project-id: ib_pubsub_sub_npe
       config:
         enabled: true
       credentials:
-        location: file:C:\Users\SAILS-DM93\Downloads\interviewbuilder-9e90ab5dba36.json
+        location: file:C:\Users\SAILS-DM93\Downloads\interview-builder-dev-29bcb0700b7b.json
 
 db:
   schema: sails
@@ -30,5 +30,5 @@ app:
   name: Interview Builder
 
 pubsub:
-  topic: projects/interviewbuilder/topics/interview-builder-dev
-  subscription: projects/interviewbuilder/subscriptions/interview-builder-dev-sub
+  topic: projects/interview-builder-dev/topics/ib_pubsub_topic_npe
+  subscription: projects/interview-builder-dev/subscriptions/ib_pubsub_sub_npe
